@@ -32,21 +32,76 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
 
-    const carftySixDB = client.db("craftDB").collection('craftItemDB');
+    // fixed 6 item collection
+    const craftySixDB = client.db("craftDB").collection('craftItemDB');
+    // own added item collection
+    const ownAddedItemDb = client.db('craftDB').collection('ownAddedItemDB')
 
     // craftItems
     app.get('/craftItems',async(req,res)=>{
-        const result = await carftySixDB.find().toArray()
+        const result = await craftySixDB.find().toArray()
         res.send(result)
     })
+
     // get single craftItem data in another page
     app.get('/craftItems/:id', async(req,res)=>{
         const id = req.params.id
         const qurey = {_id : new ObjectId(id)};
-        const result = await carftySixDB.findOne(qurey);
+        const result = await craftySixDB.findOne(qurey);
         res.send(result)
     })
 
+    // get my own added item in ui
+    app.get('/myItem/:email',async(req,res)=>{
+      const result = await ownAddedItemDb.find({email: req.params.email}).toArray()
+      res.send(result)
+  })
+
+    // my added item
+    app.post('/ownItem',async(req,res)=>{
+      const newItem = req.body;
+      const result = await ownAddedItemDb.insertOne(newItem)
+      res.send(result)
+
+  })
+
+   // delete item 
+   app.delete('/item/:id', async(req,res)=>{
+    const id = req.params.id
+    const qurey = {_id : new ObjectId(id)}
+    const result = await ownAddedItemDb.deleteOne(qurey)
+    res.send(result)
+})
+
+// get single item data in another page
+app.get('/item/:id', async(req,res)=>{
+  const id = req.params.id
+  const qurey = {_id : new ObjectId(id)};
+  const result = await ownAddedItemDb.findOne(qurey);
+  res.send(result)
+})
+
+  // update data
+  app.put('/item/:id', async(req,res)=>{
+    const id = req.params.id;
+    const qurey = {_id : new ObjectId(id)};
+    const options = { upsert: true };
+    const updatedItem = req.body
+    const item = {
+        $set:{
+            name: updatedItem.name,
+            userName: updatedItem.userName,
+            subcategoryName: updatedItem.subcategoryName,
+            processingTime: updatedItem.processingTime,
+            price: updatedItem.price,
+            rating: updatedItem.rating,
+            email: updatedItem.email,
+            shortDescription: updatedItem.shortDescription,  
+            customization: updatedItem.customization          }
+    }
+    const result = await ownAddedItemDb.updateOne(qurey, item, options);
+    res.send(result)
+})
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
