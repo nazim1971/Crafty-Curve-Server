@@ -73,6 +73,12 @@ async function run() {
     res.send(result)
 })
 
+// get All User Added Data
+ app.get('/item',async(req,res)=>{
+  const result = await ownAddedItemDb.find().toArray()
+  res.send(result)
+})
+
 // get single item data in another page
 app.get('/item/:id', async(req,res)=>{
   const id = req.params.id
