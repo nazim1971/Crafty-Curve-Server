@@ -36,6 +36,8 @@ async function run() {
     const craftySixDB = client.db("craftDB").collection('craftItemDB');
     // own added item collection
     const ownAddedItemDb = client.db('craftDB').collection('ownAddedItemDB')
+    // all category collection
+    const allCategoryDb = client.db('craftDB').collection('subCategoryDB')
 
     // craftItems
     app.get('/craftItems',async(req,res)=>{
@@ -57,19 +59,25 @@ async function run() {
       res.send(result)
   })
 
-//   // filter bassed on Yes
-//   app.get('/filter/yes', async(req, res) => {
-//     const query = { customization: 'yes' };
-//     const result = await ownAddedItemDb.find(query).toArray();
-//     res.send(result);
-// });
+  // get data based on subCategory
+  app.get('/subCategory/:subcategoryName',async(req,res)=>{
+    const result = await allCategoryDb.find({subcategoryName: req.params.subcategoryName}).toArray()
+    res.send(result)
+})
 
-// // filter based on No
-// app.get('/filter/no', async(req, res) => {
-//   const query = { customization: 'no' };
-//   const result = await ownAddedItemDb.find(query).toArray();
-//   res.send(result);
-// });
+
+app.get('/subCategory',async(req,res)=>{
+  const result = await allCategoryDb.find().toArray()
+  res.send(result)
+})
+
+// get single item data in another page
+app.get('/subCat/:id', async(req,res)=>{
+  const id = req.params.id
+  const qurey = {_id : new ObjectId(id)};
+  const result = await allCategoryDb.findOne(qurey);
+  res.send(result)
+})
 
 
     
