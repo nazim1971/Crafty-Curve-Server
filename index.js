@@ -57,6 +57,22 @@ async function run() {
       res.send(result)
   })
 
+//   // filter bassed on Yes
+//   app.get('/filter/yes', async(req, res) => {
+//     const query = { customization: 'yes' };
+//     const result = await ownAddedItemDb.find(query).toArray();
+//     res.send(result);
+// });
+
+// // filter based on No
+// app.get('/filter/no', async(req, res) => {
+//   const query = { customization: 'no' };
+//   const result = await ownAddedItemDb.find(query).toArray();
+//   res.send(result);
+// });
+
+
+    
     // my added item
     app.post('/ownItem',async(req,res)=>{
       const newItem = req.body;
@@ -72,6 +88,8 @@ async function run() {
     const result = await ownAddedItemDb.deleteOne(qurey)
     res.send(result)
 })
+
+
 
 // get All User Added Data
  app.get('/item',async(req,res)=>{
@@ -101,6 +119,7 @@ app.get('/item/:id', async(req,res)=>{
             processingTime: updatedItem.processingTime,
             price: updatedItem.price,
             rating: updatedItem.rating,
+            photo: updatedItem.photo,
             email: updatedItem.email,
             shortDescription: updatedItem.shortDescription,  
             customization: updatedItem.customization          }
