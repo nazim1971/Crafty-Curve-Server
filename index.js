@@ -59,6 +59,8 @@ async function run() {
       res.send(result)
   })
 
+  
+
   // get data based on subCategory
   app.get('/subCategory/:subcategoryName',async(req,res)=>{
     const result = await allCategoryDb.find({subcategoryName: req.params.subcategoryName}).toArray()
