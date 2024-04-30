@@ -8,7 +8,9 @@ const port = process.env.PORT || 5000;
 
 // middlewire
 
-app.use (cors({origin:["http://localhost:5173"]}))
+app.use(cors({
+  origin: ["https://crafty-carve.web.app", "https://craftycarve.netlify.app"]
+}));
 app.use(express.json())
 
 
